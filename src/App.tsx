@@ -129,9 +129,7 @@ function App() {
   function handleDieClick(dieIdx: number) {
     setDice((prevDice) => {
       const newDice = prevDice.map((die, i) =>
-        dieIdx === i
-          ? { ...die, kept: !die.kept, selected: !die.selected }
-          : die
+        dieIdx === i ? { ...die, selected: !die.selected } : die
       );
 
       const score = calculateScore(newDice);
@@ -151,6 +149,25 @@ function App() {
         !die.selected ? { ...die, value: getRandomDieNumber() } : die
       )
     );
+  }
+  function scoreAndPass() {
+    const totalScore = roundScore.player + selectedScore.player;
+    setTotalScore((prevTotalScore) => ({
+      ...prevTotalScore,
+      player: prevTotalScore.player + totalScore,
+    }));
+
+    setRoundScore((prevRoundScore) => ({
+      ...prevRoundScore,
+      player: 0,
+    }));
+
+    setSelectedScore((prevSelectedScore) => ({
+      ...prevSelectedScore,
+      player: 0,
+    }));
+
+    setDice(getStarterDice());
   }
 
   return (
@@ -184,12 +201,14 @@ function App() {
         </section>
 
         <section className="table">
-          <ul className="dice">
+          <ul className="main-deck">
             {dice.map((die, idx) => (
               <li
                 key={idx}
                 onClick={() => handleDieClick(idx)}
-                className={`die ${die.selected ? "selected" : ""}`}
+                className={`die ${die.selected ? "selected" : ""} ${
+                  die.kept ? "kept" : ""
+                }`}
               >
                 <DieIcon value={die.value} />
               </li>
@@ -199,7 +218,9 @@ function App() {
 
         <section className="actions">
           <button type="button">Score and continue</button>
-          <button type="button">Score and pass</button>
+          <button type="button" onClick={scoreAndPass}>
+            Score and pass
+          </button>
           <button type="button">Pass</button>
           <button type="button" onClick={rollDice}>
             Roll (test)

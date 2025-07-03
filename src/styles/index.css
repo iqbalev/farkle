@@ -57,7 +57,7 @@ a {
 .player,
 .score,
 .opponent,
-.dice,
+.main-deck,
 .actions {
   padding: 1rem 1rem;
 }
@@ -87,7 +87,7 @@ a {
 .table {
   display: flex;
 
-  .dice {
+  .main-deck {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -111,6 +111,10 @@ a {
         height: 4rem;
         width: 4rem;
         transform: rotate(180deg);
+      }
+
+      &.kept {
+        display: none;
       }
     }
   }
