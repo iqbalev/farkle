@@ -22,22 +22,15 @@ type SelectedScore = {
   opponent: number;
 };
 
-function generateDie() {
-  return {
-    value: Math.floor(Math.random() * 6) + 1,
+function getRandomDieNumber() {
+  return Math.floor(Math.random() * 6) + 1;
+}
+function getStarterDice() {
+  return Array.from({ length: 6 }, () => ({
+    value: getRandomDieNumber(),
     kept: false,
     selected: false,
-  };
-}
-function initStarterDice() {
-  return [
-    generateDie(),
-    generateDie(),
-    generateDie(),
-    generateDie(),
-    generateDie(),
-    generateDie(),
-  ];
+  }));
 }
 function calculateScore(dice: Die[]) {
   function countSelectedDiceByValue(dice: Die[], val: number) {
@@ -118,7 +111,7 @@ function calculateScore(dice: Die[]) {
 }
 
 function App() {
-  const [dice, setDice] = useState<Dice>(initStarterDice);
+  const [dice, setDice] = useState<Dice>(getStarterDice);
   const [goalScore, setGoalScore] = useState<GoalScore>(1500);
   const [totalScore, setTotalScore] = useState<TotalScore>({
     player: 0,
@@ -133,15 +126,6 @@ function App() {
     opponent: 0,
   });
 
-  function rollDice() {
-    setDice((prevDice) =>
-      prevDice.map((die) =>
-        !die.selected
-          ? { ...die, value: Math.floor(Math.random() * 6) + 1 }
-          : die
-      )
-    );
-  }
   function handleDieClick(dieIdx: number) {
     setDice((prevDice) => {
       const newDice = prevDice.map((die, i) =>
@@ -157,8 +141,16 @@ function App() {
           player: score,
         };
       });
+
       return newDice;
     });
+  }
+  function rollDice() {
+    setDice((prevDice) =>
+      prevDice.map((die) =>
+        !die.selected ? { ...die, value: getRandomDieNumber() } : die
+      )
+    );
   }
 
   return (
