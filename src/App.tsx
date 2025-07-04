@@ -150,6 +150,31 @@ function App() {
       )
     );
   }
+  function scoreAndContinue() {
+    setRoundScore((prevRoundScore) => ({
+      ...prevRoundScore,
+      player: prevRoundScore.player + selectedScore.player,
+    }));
+
+    setDice((prevDice) => {
+      const isAllDieScored = prevDice.every((die) => die.kept || die.selected);
+      if (isAllDieScored) return getStarterDice();
+      return prevDice.map((die) => {
+        if (die.selected) {
+          return { ...die, kept: true, selected: false };
+        } else if (!die.kept && !die.selected) {
+          return { ...die, value: getRandomDieNumber() };
+        } else {
+          return die;
+        }
+      });
+    });
+
+    setSelectedScore((prevSelectedScore) => ({
+      ...prevSelectedScore,
+      player: 0,
+    }));
+  }
   function scoreAndPass() {
     const totalScore = roundScore.player + selectedScore.player;
     setTotalScore((prevTotalScore) => ({
@@ -217,7 +242,9 @@ function App() {
         </section>
 
         <section className="actions">
-          <button type="button">Score and continue</button>
+          <button type="button" onClick={scoreAndContinue}>
+            Score and continue
+          </button>
           <button type="button" onClick={scoreAndPass}>
             Score and pass
           </button>
