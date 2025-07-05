@@ -1,6 +1,6 @@
-type DieIconProps = { value: number };
+type DieIconProps = { value: number; className?: string };
 
-function DieIcon({ value }: DieIconProps) {
+export function DieIcon({ value, className }: DieIconProps) {
   if (value === 1) {
     return (
       <svg
@@ -11,6 +11,7 @@ function DieIcon({ value }: DieIconProps) {
         version="1.1"
         xmlns="http://www.w3.org/2000/svg"
         stroke="#f0f0f0"
+        className={`face ${className}`}
       >
         <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
         <g
@@ -34,6 +35,7 @@ function DieIcon({ value }: DieIconProps) {
         version="1.1"
         xmlns="http://www.w3.org/2000/svg"
         stroke="#f0f0f0"
+        className={`face ${className}`}
       >
         <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
         <g
@@ -57,6 +59,7 @@ function DieIcon({ value }: DieIconProps) {
         version="1.1"
         xmlns="http://www.w3.org/2000/svg"
         stroke="#f0f0f0"
+        className={`face ${className}`}
       >
         <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
         <g
@@ -79,6 +82,7 @@ function DieIcon({ value }: DieIconProps) {
         viewBox="0 0 32 32"
         version="1.1"
         xmlns="http://www.w3.org/2000/svg"
+        className={`face ${className}`}
       >
         <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
         <g
@@ -102,6 +106,7 @@ function DieIcon({ value }: DieIconProps) {
         version="1.1"
         xmlns="http://www.w3.org/2000/svg"
         stroke="#f0f0f0"
+        className={`face ${className}`}
       >
         <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
         <g
@@ -125,6 +130,7 @@ function DieIcon({ value }: DieIconProps) {
         version="1.1"
         xmlns="http://www.w3.org/2000/svg"
         stroke="#f0f0f0"
+        className={`face ${className}`}
       >
         <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
         <g
@@ -140,5 +146,3 @@ function DieIcon({ value }: DieIconProps) {
     );
   }
 }
-
-export default DieIcon;

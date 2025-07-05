@@ -1,11 +1,19 @@
 import { useState } from "react";
-import DieIcon from "./components/icons";
+import { DieIcon } from "./components/Icons";
 import "./styles/index.css";
 
 type Die = {
+  id: string;
   value: number;
   kept: boolean;
   selected: boolean;
+  style: {
+    rotation: number;
+    position: {
+      x: number;
+      y: number;
+    };
+  };
 };
 type Dice = Die[];
 type GoalScore = number;
@@ -22,14 +30,25 @@ type SelectedScore = {
   opponent: number;
 };
 
-function getRandomDieNumber() {
+function getDieNumber() {
   return Math.floor(Math.random() * 6) + 1;
+}
+function getDieStyle() {
+  return {
+    rotation: Math.floor(Math.random() * 360) + 1,
+    position: {
+      x: Math.floor(Math.random() * 200) + 1,
+      y: Math.floor(Math.random() * 200) + 1,
+    },
+  };
 }
 function getStarterDice() {
   return Array.from({ length: 6 }, () => ({
-    value: getRandomDieNumber(),
+    id: crypto.randomUUID(),
+    value: getDieNumber(),
     kept: false,
     selected: false,
+    style: getDieStyle(),
   }));
 }
 function calculateScore(dice: Die[]) {
@@ -126,10 +145,10 @@ function App() {
     opponent: 0,
   });
 
-  function handleDieClick(dieIdx: number) {
+  function handleDieClick(dieId: string) {
     setDice((prevDice) => {
-      const newDice = prevDice.map((die, i) =>
-        dieIdx === i ? { ...die, selected: !die.selected } : die
+      const newDice = prevDice.map((die) =>
+        dieId === die.id ? { ...die, selected: !die.selected } : die
       );
 
       const score = calculateScore(newDice);
@@ -146,7 +165,9 @@ function App() {
   function rollDice() {
     setDice((prevDice) =>
       prevDice.map((die) =>
-        !die.selected ? { ...die, value: getRandomDieNumber() } : die
+        !die.selected
+          ? { ...die, value: getDieNumber(), style: getDieStyle() }
+          : die
       )
     );
   }
@@ -163,7 +184,11 @@ function App() {
         if (die.selected) {
           return { ...die, kept: true, selected: false };
         } else if (!die.kept && !die.selected) {
-          return { ...die, value: getRandomDieNumber() };
+          return {
+            ...die,
+            value: getDieNumber(),
+            style: getDieStyle(),
+          };
         } else {
           return die;
         }
@@ -226,18 +251,40 @@ function App() {
         </section>
 
         <section className="table">
-          <ul className="main-deck">
-            {dice.map((die, idx) => (
-              <li
-                key={idx}
-                onClick={() => handleDieClick(idx)}
-                className={`die ${die.selected ? "selected" : ""} ${
-                  die.kept ? "kept" : ""
-                }`}
-              >
-                <DieIcon value={die.value} />
-              </li>
-            ))}
+          <ul className="dice side">
+            {dice
+              .filter((die) => die.kept)
+              .map((die) => (
+                <li
+                  key={die.id}
+                  style={{
+                    transform: `rotate(${die.style.rotation}deg)`,
+                  }}
+                  className="die"
+                >
+                  <DieIcon value={die.value} />
+                </li>
+              ))}
+          </ul>
+
+          <ul className="dice main">
+            {dice
+              .filter((die) => !die.kept)
+              .map((die) => (
+                <li
+                  key={die.id}
+                  onClick={() => handleDieClick(die.id)}
+                  style={{
+                    transform: `rotate(${die.style.rotation}deg) translate(${die.style.position.x}px, ${die.style.position.y}px)`,
+                  }}
+                  className="die"
+                >
+                  <DieIcon
+                    value={die.value}
+                    className={die.selected ? "selected" : ""}
+                  />
+                </li>
+              ))}
           </ul>
         </section>
 

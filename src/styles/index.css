@@ -1,8 +1,9 @@
 @import url("https://fonts.googleapis.com/css2?family=B612:ital,wght@0,400;0,700;1,400;1,700&family=IM+Fell+English:ital@0;1&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Kanchenjunga:wght@400;500;600;700&family=Macondo&family=MedievalSharp&family=Modern+Antiqua&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Pirata+One&family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&family=Skranji:wght@400;700&family=UnifrakturCook:wght@700&display=swap");
 
 :root {
-  --white: #f5f3e7;
-  --black: #000;
+  --white: rgb(245, 243, 231);
+  --black: rgb(0, 0, 0, 1);
+  --yellow: rgba(237, 243, 157, 1);
 }
 
 * {
@@ -43,6 +44,9 @@ a,
 button {
   color: var(--white);
 }
+li {
+  list-style: none;
+}
 a {
   text-decoration: none;
 }
@@ -57,7 +61,7 @@ a {
 .player,
 .score,
 .opponent,
-.main-deck,
+.dice,
 .actions {
   padding: 1rem 1rem;
 }
@@ -87,35 +91,43 @@ a {
 .table {
   display: flex;
 
-  .main-deck {
+  .die {
     display: flex;
     justify-content: center;
     align-items: center;
-    flex: 1;
-    gap: 1rem;
+    height: 4rem;
+    width: 4rem;
+    transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
 
-    .die {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      list-style: none;
-      height: 3rem;
-      width: 3rem;
-      transition: all 0.2s;
+    &:hover {
+      cursor: pointer;
+    }
 
-      &:hover {
-        cursor: pointer;
-      }
+    .face {
+      filter: drop-shadow(1px 8px 2px var(--black));
+      transition: filter ease-out 0.2s;
 
       &.selected {
-        height: 4rem;
-        width: 4rem;
-        transform: rotate(180deg);
+        outline: 1px dashed var(--yellow);
       }
+    }
+  }
 
-      &.kept {
-        display: none;
-      }
+  .dice {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+  }
+  .dice.side {
+    flex-direction: column;
+  }
+  .dice.main {
+    position: relative;
+    flex: 1;
+
+    .die {
+      position: absolute;
     }
   }
 }
